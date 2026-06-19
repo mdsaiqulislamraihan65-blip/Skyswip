@@ -94,7 +94,8 @@ fun ForYouScreen() {
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(end = 12.dp, bottom = 128.dp),
+                        .navigationBarsPadding()
+                        .padding(end = 12.dp, bottom = 100.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
@@ -171,7 +172,8 @@ fun ForYouScreen() {
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        .padding(start = 16.dp, bottom = 120.dp, end = 80.dp)
+                        .navigationBarsPadding()
+                        .padding(start = 16.dp, bottom = 100.dp, end = 80.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text("@the_future_edit", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp, 
@@ -222,7 +224,8 @@ fun ForYouScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 48.dp, start = 16.dp, end = 16.dp),
+                .statusBarsPadding()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Top
         ) {

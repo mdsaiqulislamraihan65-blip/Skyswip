@@ -25,11 +25,12 @@ fun InboxScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(PureBlack)
+            .statusBarsPadding()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 48.dp, start = 16.dp, end = 16.dp),
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -39,7 +40,7 @@ fun InboxScreen() {
         
         Spacer(modifier = Modifier.height(24.dp))
         
-        LazyColumn(contentPadding = PaddingValues(bottom = 100.dp)) {
+        LazyColumn(contentPadding = PaddingValues(bottom = 140.dp)) {
             items(10) { index ->
                 NotificationRow(index)
             }

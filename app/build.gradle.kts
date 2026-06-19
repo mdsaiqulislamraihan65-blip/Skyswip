@@ -65,6 +65,15 @@ secrets {
   defaultPropertiesFileName = ".env.example"
 }
 
+tasks.register<Exec>("copyAppApkToRoot") {
+    workingDir = rootDir
+    commandLine("cp", "app/build/outputs/apk/debug/app-debug.apk", "Skyswip.apk")
+}
+
+tasks.matching { it.name == "assembleDebug" }.configureEach {
+    finalizedBy("copyAppApkToRoot")
+}
+
 // Some unused dependencies are commented out below instead of being removed.
 // This makes it easy to add them back in the future if needed.
 dependencies {

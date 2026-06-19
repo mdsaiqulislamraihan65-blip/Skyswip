@@ -32,6 +32,7 @@ fun DiscoverScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(PureBlack)
+            .statusBarsPadding()
             .padding(16.dp)
     ) {
         // Search bar
@@ -90,7 +91,8 @@ fun DiscoverScreen() {
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 120.dp)
         ) {
             items(10) {
                 Box(

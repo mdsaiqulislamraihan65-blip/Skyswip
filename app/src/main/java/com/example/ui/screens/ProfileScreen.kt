@@ -32,6 +32,7 @@ fun ProfileScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(PureBlack)
+            .statusBarsPadding()
     ) {
         // Header
         Box(
@@ -129,7 +130,8 @@ fun ProfileScreen() {
             columns = GridCells.Fixed(3),
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 140.dp)
         ) {
             items(15) {
                 Box(
