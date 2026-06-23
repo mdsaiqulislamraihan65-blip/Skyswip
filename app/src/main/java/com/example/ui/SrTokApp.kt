@@ -61,16 +61,20 @@ import com.example.ui.theme.PureBlack
 @Composable
 fun SrTokApp() {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         containerColor = Color.Transparent,
         bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp)
-            ) {
-                BottomBar(navController = navController)
+            if (currentRoute != "camera" && currentRoute != "settings") {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 24.dp)
+                ) {
+                    BottomBar(navController = navController)
+                }
             }
         }
     ) { innerPadding ->
@@ -117,9 +121,10 @@ fun SrTokApp() {
             ) {
                 composable("home") { ForYouScreen() }
                 composable("discover") { DiscoverScreen() }
-                composable("camera") { CameraScreen() }
+                composable("camera") { CameraScreen(onClose = { navController.popBackStack() }) }
                 composable("inbox") { InboxScreen() }
-                composable("profile") { ProfileScreen() }
+                composable("profile") { ProfileScreen(onSettingsClick = { navController.navigate("settings") }) }
+                composable("settings") { com.example.ui.screens.SettingsScreen(onBack = { navController.popBackStack() }) }
             }
         }
     }

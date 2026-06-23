@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -68,12 +69,15 @@ fun ForYouScreen() {
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->
+            var isLiked by androidx.compose.runtime.remember(page) { androidx.compose.runtime.mutableStateOf(false) }
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onDoubleTap = { offset ->
+                                isLiked = true
                                 hearts = hearts + offset
                             }
                         )
@@ -91,6 +95,7 @@ fun ForYouScreen() {
                 }
                 
                 // Right Side Actions
+                if (!showComments) {
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -129,7 +134,12 @@ fun ForYouScreen() {
                         }
                     }
                     
-                    VideoAction(icon = Icons.Default.Favorite, text = "1.2M", onClick = { })
+                    VideoAction(
+                        icon = Icons.Default.Favorite, 
+                        text = if (isLiked) "1.2M" else "1.1M", 
+                        tint = if (isLiked) Color(0xFFE91E63) else Color.White,
+                        onClick = { isLiked = !isLiked }
+                    )
                     VideoAction(icon = Icons.Default.MailOutline, text = "42.8K", onClick = { showComments = true })
                     VideoAction(icon = Icons.Default.Share, text = "Share", onClick = { })
                     VideoAction(icon = Icons.Default.MoreVert, text = "", onClick = { })
@@ -155,8 +165,10 @@ fun ForYouScreen() {
                         )
                     }
                 }
+                }
                 
                 // Bottom Gradient Overlay + Info
+                if (!showComments) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -217,59 +229,175 @@ fun ForYouScreen() {
                         }
                     }
                 }
+                }
             }
         }
         
         // Top Overlay
-        Row(
+        if (!showComments) {
+        LiquidGlassContainer(
+            shape = CircleShape,
             modifier = Modifier
-                .fillMaxWidth()
+                .align(Alignment.TopCenter)
                 .statusBarsPadding()
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Top
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                .fillMaxWidth()
         ) {
-            Text("Following", color = Color.White.copy(alpha = 0.6f), fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-            Spacer(modifier = Modifier.width(24.dp))
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("For You", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(4.dp))
-                Box(modifier = Modifier.width(24.dp).height(3.dp).clip(CircleShape).background(ElectricViolet))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Profile Avatar
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(
+                            androidx.compose.ui.graphics.Brush.linearGradient(
+                                colors = listOf(ElectricViolet, NeonCyan)
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("FE", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                }
+
+                // Tab Switcher
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    var selectedTab by remember { mutableStateOf("For You") }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { selectedTab = "Following" }) {
+                        Text("Following", color = if (selectedTab == "Following") Color.White else Color.White.copy(alpha = 0.6f), fontSize = 16.sp, fontWeight = if (selectedTab == "Following") FontWeight.Bold else FontWeight.SemiBold)
+                        if (selectedTab == "Following") {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Box(modifier = Modifier.width(20.dp).height(3.dp).clip(CircleShape).background(ElectricViolet))
+                        } else {
+                            Spacer(modifier = Modifier.height(7.dp))
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(24.dp))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable { selectedTab = "For You" }) {
+                        Text("For You", color = if (selectedTab == "For You") Color.White else Color.White.copy(alpha = 0.6f), fontSize = 16.sp, fontWeight = if (selectedTab == "For You") FontWeight.Bold else FontWeight.SemiBold)
+                        if (selectedTab == "For You") {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Box(modifier = Modifier.width(20.dp).height(3.dp).clip(CircleShape).background(ElectricViolet))
+                        } else {
+                            Spacer(modifier = Modifier.height(7.dp))
+                        }
+                    }
+                }
+
+                // Search Icon Placeholder
+                Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White.copy(alpha = 0.8f), modifier = Modifier.size(28.dp))
             }
+        }
         }
 
         // Comments Bottom Sheet
         if (showComments) {
             val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+            val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+            val screenHeight = configuration.screenHeightDp.dp
+            
             ModalBottomSheet(
                 onDismissRequest = { showComments = false },
                 sheetState = sheetState,
-                containerColor = com.example.ui.theme.DeepObsidian,
-                dragHandle = { BottomSheetDefaults.DragHandle() }
+                containerColor = Color.Transparent,
+                scrimColor = Color.Black.copy(alpha = 0.5f),
+                dragHandle = null
             ) {
-                Column(
+                com.example.ui.components.LiquidGlassContainer(
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
+                        .height(screenHeight * 0.5f)
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 12.dp)
                     ) {
-                        Text("42.8K Comments", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        IconButton(onClick = { showComments = false }) {
-                            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+                        // Drag handle
+                        Box(
+                            modifier = Modifier
+                                .width(40.dp)
+                                .height(4.dp)
+                                .clip(CircleShape)
+                                .background(Color.White.copy(alpha = 0.4f))
+                                .align(Alignment.CenterHorizontally)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text("42.8K Comments", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            IconButton(onClick = { showComments = false }) {
+                                Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+                            }
                         }
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    LazyColumn(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        contentPadding = PaddingValues(bottom = 32.dp)
-                    ) {
-                        items(10) { index ->
-                            CommentItem(index)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(horizontal = 16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            contentPadding = PaddingValues(bottom = 16.dp)
+                        ) {
+                            items(10) { index ->
+                                CommentItem(index)
+                            }
+                        }
+
+                        // Comment Input
+                        var commentText by remember { mutableStateOf("") }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.Black.copy(alpha = 0.3f))
+                                .padding(horizontal = 16.dp, vertical = 12.dp)
+                                .imePadding(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        androidx.compose.ui.graphics.Brush.linearGradient(
+                                            colors = listOf(ElectricViolet, NeonCyan)
+                                        )
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text("FE", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                            }
+                            Spacer(modifier = Modifier.width(12.dp))
+                            OutlinedTextField(
+                                value = commentText,
+                                onValueChange = { commentText = it },
+                                placeholder = { Text("Add comment...", color = Color.Gray, fontSize = 14.sp) },
+                                modifier = Modifier.weight(1f),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = Color.Transparent,
+                                    unfocusedBorderColor = Color.Transparent,
+                                    focusedContainerColor = Color.White.copy(alpha = 0.05f),
+                                    unfocusedContainerColor = Color.White.copy(alpha = 0.05f),
+                                    focusedTextColor = Color.White,
+                                    unfocusedTextColor = Color.White
+                                ),
+                                shape = CircleShape,
+                                maxLines = 3
+                            )
                         }
                     }
                 }
@@ -312,7 +440,7 @@ fun HeartBurst(offset: Offset, onComplete: () -> Unit) {
     val scale by transition.animateFloat(
         transitionSpec = { tween(durationMillis = 600, easing = FastOutSlowInEasing) },
         label = "scale"
-    ) { state -> if (state) 1.5f else 0.5f }
+    ) { state -> if (state) 1.2f else 0.5f }
     val alpha by transition.animateFloat(
         transitionSpec = { keyframes { durationMillis = 600; 1f at 0; 1f at 400; 0f at 600 } },
         label = "alpha"
@@ -330,10 +458,10 @@ fun HeartBurst(offset: Offset, onComplete: () -> Unit) {
             tint = Color(0xFFE91E63),
             modifier = Modifier
                 .offset(
-                    x = with(LocalDensity.current) { offset.x.toDp() } - 60.dp,
-                    y = with(LocalDensity.current) { offset.y.toDp() } - 60.dp
+                    x = with(LocalDensity.current) { offset.x.toDp() } - 40.dp,
+                    y = with(LocalDensity.current) { offset.y.toDp() } - 40.dp
                 )
-                .size(120.dp)
+                .size(80.dp)
                 .scale(scale)
                 .alpha(alpha)
         )
@@ -341,7 +469,8 @@ fun HeartBurst(offset: Offset, onComplete: () -> Unit) {
 }
 
 @Composable
-fun VideoAction(icon: ImageVector, text: String, onClick: () -> Unit) {
+fun VideoAction(icon: ImageVector, text: String, tint: Color = Color.White, onClick: () -> Unit) {
+    val animatedTint by androidx.compose.animation.animateColorAsState(targetValue = tint)
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         LiquidGlassContainer(
             shape = CircleShape,
@@ -353,7 +482,7 @@ fun VideoAction(icon: ImageVector, text: String, onClick: () -> Unit) {
                     .clickable { onClick() },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(20.dp))
+                Icon(icon, contentDescription = null, tint = animatedTint, modifier = Modifier.size(20.dp))
             }
         }
         if (text.isNotEmpty()) {

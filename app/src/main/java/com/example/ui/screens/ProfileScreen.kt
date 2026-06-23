@@ -2,6 +2,7 @@ package com.example.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -27,7 +28,7 @@ import com.example.ui.theme.ElectricViolet
 import com.example.ui.theme.PureBlack
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(onSettingsClick: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,6 +47,7 @@ fun ProfileScreen() {
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(16.dp)
+                    .clickable { onSettingsClick() }
             ) {
                 Icon(
                     Icons.Default.Settings,
