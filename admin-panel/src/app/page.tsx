@@ -4,7 +4,7 @@ export default function Home() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Dashboard</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Overview of your app's performance.</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Overview of your app&apos;s performance.</p>
         </div>
         <button className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

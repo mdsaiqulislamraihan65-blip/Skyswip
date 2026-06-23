@@ -130,12 +130,12 @@ fun StudioDialog(onDismiss: () -> Unit) {
                     ) {
                         Column {
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
-                                Column {
+                                Column(modifier = Modifier.weight(1f)) {
                                     Text("Total Earnings", color = Color.LightGray, fontSize = 12.sp)
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text("$4,758.60", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
                                     Spacer(modifier = Modifier.height(4.dp))
-                                    Text("+12.5% vs last 30 days", color = Color(0xFF00FFD1), fontSize = 10.sp)
+                                    Text("+12.5% vs last 30 days", color = Color(0xFF00FFD1), fontSize = 10.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 }
                                 Box(
                                     modifier = Modifier
@@ -330,13 +330,14 @@ fun StudioStatBox(modifier: Modifier, title: String, value: String, change: Stri
     ) {
         Column {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(title, color = Color.Gray, fontSize = 11.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(title, color = Color.Gray, fontSize = 11.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(4.dp))
                 Icon(icon, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(16.dp))
             }
             Spacer(modifier = Modifier.weight(1f))
-            Text(value, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text(value, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.height(2.dp))
-            Text(change, color = Color(0xFF00FFD1), fontSize = 10.sp)
+            Text(change, color = Color(0xFF00FFD1), fontSize = 10.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }
@@ -481,41 +482,41 @@ fun StudioVideoItem(video: StudioVideo, onEditClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Views
-                Column {
+                Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.PlayArrow, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(12.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(video.views, color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(video.views, color = Color.LightGray, fontSize = 10.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
-                    Text("Views", color = Color.DarkGray, fontSize = 10.sp)
+                    Text("Views", color = Color.DarkGray, fontSize = 9.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 
                 // Earnings
-                Column {
+                Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(video.earnings, color = Color(0xFF00FFD1), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        Text(video.earnings, color = Color(0xFF00FFD1), fontSize = 10.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
-                    Text("Earnings", color = Color.DarkGray, fontSize = 10.sp)
+                    Text("Earnings", color = Color.DarkGray, fontSize = 9.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
 
                 // Likes
-                Column {
+                Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.ThumbUpOffAlt, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(12.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(video.likes, color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(video.likes, color = Color.LightGray, fontSize = 10.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
-                    Text("Likes", color = Color.DarkGray, fontSize = 10.sp)
+                    Text("Likes", color = Color.DarkGray, fontSize = 9.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
 
                 // Comments
-                Column {
+                Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.ChatBubbleOutline, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(12.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(video.comments, color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(video.comments, color = Color.LightGray, fontSize = 10.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
-                    Text("Comments", color = Color.DarkGray, fontSize = 10.sp)
+                    Text("Comments", color = Color.DarkGray, fontSize = 9.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
         }
